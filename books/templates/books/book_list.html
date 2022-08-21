@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+    Books Page
+{% endblock %}
+
+{% block css %}
+    <link href="{% static 'css/books.css' %}" rel="stylesheet" type="text/css">
+{% endblock %}
+
+{% block content %}
+    <h1 class="mb-4">Books</h1>
+
+    <nav class="navbar bg-light mb-4">
+      <div class="container-fluid">
+        <form class="d-flex" role="search">
+          <input name="q" value="{{ request.GET.q }}" class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+          <button class="btn btn-outline-success" type="submit">Search</button>
+        </form>
+      </div>
+    </nav>
+
+
+    {% if page_obj %}
+        <h6 class="mb-4">{{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</h6>
+        <!-- Book list with pictures -->
+        {% for book in page_obj %}
+            <div class="row mb-5">
+                <div class="col-2">
+                    <img class="cover-pic" src="{{ book.cover_picture.url }}">
+                </div>
+
+                <div class="col-6 ms-4">
+                    <h3><a href="{% url 'books:detail' book.id %}">{{ book.title }}</a></h3>
+                    <p class="mt-3"> {{ book.description }} </p>
+                </div>
+            </div>
+        {% endfor %}
+        <!-- /Book list with pictures -->
+
+
+        <!-- Pagination previous and next page number list -->
+        <nav aria-label="...">
+          <ul class="pagination">
+              {% if page_obj.has_previous %}
+                 <li class="page-item">
+                  <a class="page-link" href="{% url 'books:list' %}?page={{ page_obj.previous_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}"> Previous </a>
+                </li>
+              {% else %}
+                <li class="page-item disabled">
+                  <a class="page-link">Previous</a>
+                </li>
+              {% endif %}
+
+              {% for i in page_range %}
+                {% if page_obj.number == i %}
+                    <li class="page-item active" aria-current="page">
+                      <a class="page-link" href="{% url 'books:list' %}?page={{ i }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">{{ i }}</a>
+                    </li>
+                {% elif i == page_obj.paginator.ELLIPSIS %}
+                    <li class="page-item">
+                        <a class="page-link"> {{ i }} </a>
+                    </li>
+                {% else %}
+                    <li class="page-item">
+                        <a class="page-link" href="{% url 'books:list' %}?page={{ i }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}"> {{ i }} </a>
+                    </li>
+                {% endif %}
+              {% endfor %}
+
+              {% if page_obj.has_next %}
+                 <li class="page-item">
+                  <a class="page-link" href="{% url 'books:list' %}?page={{ page_obj.next_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}"> Next </a>
+                </li>
+              {% else %}
+                <li class="page-item disabled">
+                  <a class="page-link">Next</a>
+                </li>
+              {% endif %}
+          </ul>
+        </nav>
+        <!-- /Pagination previous and next page number list -->
+    {% else %}
+        <p> No books found. </p>
+    {% endif %}
+
+{% endblock %}

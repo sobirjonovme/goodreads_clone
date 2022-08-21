@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}
+    Register Page
+{% endblock %}
+
+{% block content %}
+    <h3> Register </h3>
+
+    <div>
+      <div class="row">
+        <div class="col-4">
+            <form method="post" enctype="multipart/form-data" action="{% url 'users:register' %}">
+                <!-- action="{% url 'users:register' %}" deyish shart emas -->
+                <!-- Agarda login view'dagi get va post method'lari bitta url'da bo'lsa -->
+                <!-- Bizning holatda shunday shart emas -->
+                {% csrf_token %}
+                {{ form | crispy }}
+
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+        </div>
+      </div>
+    </div>
+
+{% endblock %}

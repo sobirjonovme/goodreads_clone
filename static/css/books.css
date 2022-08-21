@@ -1,0 +1,6 @@
+.cover-pic {
+    height: 320px;
+    width: 206px;
+    object-fit: cover;
+    object-position: 100% 0;
+}

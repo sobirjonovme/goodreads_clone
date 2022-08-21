@@ -1,0 +1,112 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block title %}
+    Book Detail
+{% endblock %}
+
+{% block css %}
+    <link href="{% static 'css/books.css' %}" rel="stylesheet" type="text/css">
+{% endblock %}
+
+
+{% block content %}
+    <h1 class="mb-5">Book Detail</h1>
+
+    <div class="row">
+        <div class="col-2">
+            <img class="cover-pic" alt="cover picture" src="{{ book.cover_picture.url }}">
+        </div>
+
+        <div class="col-6 ms-4">
+            <h2> {{ book.title }} </h2>
+
+            {% if book.bookauthor_set.all %}
+                <p class="fst-italic">
+                    <span>Author{{ book.bookauthor_set.all | pluralize }}: </span>
+                    {% for book_author in book.bookauthor_set.all %}
+                        {% if forloop.last %}
+                        <span class="fw-semibold"> {{ book_author.author }} </span>
+                        {% else %}
+                            <span class="fw-semibold"> {{ book_author.author }}</span>,
+                        {% endif %}
+                    {% endfor %}
+                </p>
+
+            {% else %}
+                <p class="fst-italic"> Author: <span class="fw-semibold"> Unknown </span> </p>
+            {% endif %}
+
+            <p> {{ book.description }} </p>
+        </div>
+    </div>
+
+
+    <section class="row mt-3" >
+        <div class="col-8">
+          <div class="container py-4">
+
+              <div class="mb-3 fw-semibold fs-1">Reviews</div>
+
+              <div class="row d-flex justify-content-center">
+                <div class="col-12 col-10">
+                  <div class="card text-dark">
+
+                    <div class="card-body p-4">
+                        <div class="flex-start">
+                            <h5 class="fw-semibold mb-3"> Write Review </h5>
+                            <form method="post" action="{% url 'books:add_review' book.id %}">
+                                {% csrf_token %}
+                                {{ review_form | crispy }}
+                                <button class="btn btn-success" type="submit"> add review </button>
+                            </form>
+                        </div>
+                    </div>
+                    <hr class="my-0" />
+
+                    {% for review in reviews_list %}
+                        <div class="card-body p-4">
+                          <div class="d-flex flex-start">
+                            <img class="rounded-circle shadow-1-strong me-3"
+                              src="{{ review.user.profile_picture.url }}" alt="avatar" width="60" height="60" />
+                            <div>
+                              <h6 class="fw-bold mb-1">{{ review.user.first_name }} {{ review.user.last_name }}</h6>
+                              <h6 class="fw-normal mb-1">@{{ review.user.username }} </h6>
+                              <div class="d-flex align-items-center mb-3">
+                                <p class="fw-light mb-0">
+                                  {{ review.create_at | date:"d F, Y | H:i" }}
+                                  <span class="badge bg-warning text-dark"> rated {{ review.stars_given }} star{{ review.stars_given | pluralize }}</span>
+
+                                  {% if review.user == request.user %}
+                                    | <a href="{% url 'books:review-edit' book.id review.id %}"><i class="bi bi-pencil-square"></i></a>
+                                    | <a href="{% url 'books:confirm-delete-review' book.id review.id %}"><i class="bi bi-trash3"></i></a>
+                                  {% endif %}
+                                </p>
+                              </div>
+                              <p class="mb-0">
+                                {{ review.comment_text }}
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+
+                        <hr class="my-0" />
+
+                    {% empty %}
+                        <p class="fs-2 fw-normal text-center text-muted">No comments yet</p>
+                    {% endfor %}
+
+
+
+
+                  </div>
+                </div>
+              </div>
+            </div>
+        </div>
+    </section>
+
+
+{% endblock %}

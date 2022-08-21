@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block css %}
+    <link href="{% static 'css/home.css' %}" rel="stylesheet">
+    <link href="{% static 'css/books.css' %}" rel="stylesheet">
+{% endblock %}
+
+
+{% block content %}
+
+<h1> Reviews </h1>
+
+
+{% if page_reviews %}
+
+    <!-- Reviews List -->
+    {% for review in page_reviews %}
+        <div class="container posts-content">
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="card mb-4">
+                      <div class="card-body">
+                        <div class="media mb-3">
+                          <img src="{{ review.user.profile_picture.url }}" class="d-block ui-w-40 rounded-circle" alt="">
+                          <div class="media-body ml-3">
+                              {{ review.user.username }}
+                            <div class="text-muted small"> {{ review.create_at | date:"d F, Y | H:i" }} </div>
+                          </div>
+                        </div>
+
+                        <p> {{ review.comment_text | truncatechars:300 }} </p>
+
+                            <img class="cover-pic my-center" src="{{ review.book.cover_picture.url }}">
+
+                      </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+    <!-- /Reviews List -->
+
+
+    <!-- Pagination previous and next page number list -->
+    <nav aria-label="...">
+      <ul class="pagination">
+          {% if page_reviews.has_previous %}
+             <li class="page-item">
+              <a class="page-link" href="{% url 'home_page' %}?page={{ page_reviews.previous_page_number }}"> Previous </a>
+            </li>
+          {% else %}
+            <li class="page-item disabled">
+              <a class="page-link">Previous</a>
+            </li>
+          {% endif %}
+
+          {% for i in page_range %}
+            {% if page_reviews.number == i %}
+                <li class="page-item active" aria-current="page">
+                  <a class="page-link" href="{% url 'home_page' %}?page={{ i }}">{{ i }}</a>
+                </li>
+            {% elif i == page_reviews.paginator.ELLIPSIS %}
+                <li class="page-item">
+                    <a class="page-link"> {{ i }} </a>
+                </li>
+            {% else %}
+                <li class="page-item">
+                    <a class="page-link" href="{% url 'home_page' %}?page={{ i }}"> {{ i }} </a>
+                </li>
+            {% endif %}
+          {% endfor %}
+
+          {% if page_reviews.has_next %}
+             <li class="page-item">
+              <a class="page-link" href="{% url 'home_page' %}?page={{ page_reviews.next_page_number }}"> Next </a>
+            </li>
+          {% else %}
+            <li class="page-item disabled">
+              <a class="page-link">Next</a>
+            </li>
+          {% endif %}
+      </ul>
+    </nav>
+    <!-- /Pagination previous and next page number list -->
+
+{% else %}
+    <h2> No Reviews found </h2>
+
+{% endif %}
+
+{% endblock %}
