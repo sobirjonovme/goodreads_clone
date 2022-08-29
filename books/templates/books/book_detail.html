@@ -16,11 +16,11 @@
     <h1 class="mb-5">Book Detail</h1>
 
     <div class="row">
-        <div class="col-2">
+        <div class="col-3">
             <img class="cover-pic" alt="cover picture" src="{{ book.cover_picture.url }}">
         </div>
 
-        <div class="col-6 ms-4">
+        <div class="col-7 ms-4" style="background-color: #F5E4C0;">
             <h2> {{ book.title }} </h2>
 
             {% if book.bookauthor_set.all %}
