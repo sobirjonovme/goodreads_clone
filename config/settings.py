@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'rest_framework',
     "crispy_forms",
     "crispy_bootstrap5",
+    # 'whitenoise.runserver_nostatic'  # for static files
 
     # local apps
     'books.apps.BooksConfig',
@@ -51,6 +52,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    # 'whitenoise.middleware.WhiteNoiseMiddleware',  # for static files
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -169,6 +171,10 @@ MEDIA_URL = '/media/'  # Buni config.urls da ishlatamiz
 STATICFILES_DIRS = [
     BASE_DIR / 'static',
 ]
+STATIC_ROOT = str(BASE_DIR.joinpath('staticfiles'))
+STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.StaticFilesStorage'
+# STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'  # for whitenoise
+
 
 # Crispy Bootstrap 5 settings
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
