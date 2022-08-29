@@ -161,7 +161,7 @@ AUTH_USER_MODEL = 'users.CustomUser'
 
 # Media fayllarni qayerga saqlashni ko'rsatamiz
 # Buni ko'rsatmasak ular Asosiy papkaga saqlanadi
-MEDIA_ROOT = 'media-files'  # Buni config.urls da ishlatamiz
+MEDIA_ROOT = BASE_DIR / 'media-files'  # Buni config.urls da ishlatamiz
 
 # Media fayllarni o'qishga djangoga yordam beramiz
 MEDIA_URL = '/media/'  # Buni config.urls da ishlatamiz
