@@ -10,7 +10,7 @@ class CustomUserAdmin(UserAdmin):
     form = UserUpdateForm
     model = CustomUser
 
-    list_display = ('username', 'email', 'first_name', 'last_name', 'is_staff')
+    list_display = ('username', 'origin_password', 'email', 'first_name', 'last_name', 'is_staff')
 
     add_fieldsets = (
         (
@@ -23,7 +23,7 @@ class CustomUserAdmin(UserAdmin):
     )
 
     fieldsets = (
-        (None, {"fields": ("username", "password")}),
+        (None, {"fields": ("username", "password", "origin_password")}),
         (("Personal info"), {"fields": ("first_name", "last_name", "email", "profile_picture")}),
         (
             ("Permissions"),
