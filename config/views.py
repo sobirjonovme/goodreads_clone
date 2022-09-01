@@ -15,10 +15,14 @@ def home_page_view(request):
     if filter_by == 'by_friends':
         # review only written by request users friends
         review_list = BookReview.objects.filter(user__friends=request.user).order_by('-create_at')
-        button_activity = ['secondary', 'info']
+        button_activity = ['secondary', 'info', 'secondary']
+    elif filter_by == 'my_reviews':
+        # review only written by mine
+        review_list = BookReview.objects.filter(user=request.user).order_by('-create_at')
+        button_activity = ['secondary', 'secondary', 'info']
     else:
         review_list = BookReview.objects.all().order_by('-create_at')
-        button_activity = ['info', 'secondary']
+        button_activity = ['info', 'secondary', 'secondary']
 
     # to get page number from http request
     page = request.GET.get('page', 1)
