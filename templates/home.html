@@ -36,17 +36,21 @@
                         <div class="card mb-4">
                           <div class="card-body">
                             <div class="media mb-3">
-                              <img src="{{ review.user.profile_picture.url }}" class="d-block ui-w-40 rounded-circle" alt="">
+                              <a href="{% url 'users:profile' review.user.username %}">
+                                  <img src="{{ review.user.profile_picture.url }}" class="d-block ui-w-40 rounded-circle" alt="">
+                              </a>
                               <div class="media-body ml-3">
-                                  {{ review.user.username }}
+                                  <a href="{% url 'users:profile' review.user.username %}">
+                                      {{ review.user.username }}
+                                  </a>
                                 <div class="text-muted small"> {{ review.create_at | date:"d F, Y | H:i" }} </div>
                               </div>
                             </div>
 
                             <p> {{ review.comment_text | truncatechars:300 }} </p>
-
+                            <a href="{% url 'books:detail' review.book.id %}">
                                 <img class="cover-pic my-center" src="{{ review.book.cover_picture.url }}">
-
+                            </a>
                           </div>
                         </div>
                     </div>
