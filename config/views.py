@@ -1,4 +1,5 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from django.urls import reverse
 from django.core.paginator import Paginator
 
 from books.models import BookReview
@@ -12,17 +13,20 @@ def home_page_view(request):
     # reviews filter
     filter_by = request.GET.get('filter', 'all')
 
-    if filter_by == 'by_friends':
-        # review only written by request users friends
-        review_list = BookReview.objects.filter(user__friends=request.user).order_by('-create_at')
-        button_activity = ['secondary', 'info', 'secondary']
-    elif filter_by == 'my_reviews':
-        # review only written by mine
-        review_list = BookReview.objects.filter(user=request.user).order_by('-create_at')
-        button_activity = ['secondary', 'secondary', 'info']
-    else:
+    if filter_by == 'all':
         review_list = BookReview.objects.all().order_by('-create_at')
         button_activity = ['info', 'secondary', 'secondary']
+    elif request.user.is_authenticated:
+        if filter_by == 'by_friends':
+            # review only written by request users friends
+            review_list = BookReview.objects.filter(user__friends=request.user).order_by('-create_at')
+            button_activity = ['secondary', 'info', 'secondary']
+        elif filter_by == 'my_reviews':
+            # review only written by mine
+            review_list = BookReview.objects.filter(user=request.user).order_by('-create_at')
+            button_activity = ['secondary', 'secondary', 'info']
+    else:
+        return redirect(reverse('users:login'))
 
     # to get page number from http request
     page = request.GET.get('page', 1)
