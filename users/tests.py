@@ -161,11 +161,11 @@ class LoginTestCase(TestCase):
 
 class ProfileTestCase(TestCase):
     def test_login_required(self):
-        response = self.client.get(reverse('users:profile'))
+        response = self.client.get(reverse('users:profile', kwargs={'username': 'any_username'}))
 
         # Djangoda redirect funksiyasi 302 status code qaytarishi kerak
         self.assertEqual(response.status_code, 302)
-        self.assertEqual(response.url, reverse('users:login') + '?next=' + reverse('users:profile'))
+        self.assertEqual(response.url, reverse('users:login') + '?next=' + reverse('users:profile', kwargs={'username': 'any_username'}))
 
     def test_profile_details(self):
         user = CustomUser.objects.create(
@@ -179,7 +179,7 @@ class ProfileTestCase(TestCase):
 
         # client'ning login funksiyasi
         self.client.login(username='testusername', password='parol12345')
-        response = self.client.get(reverse('users:profile'))
+        response = self.client.get(reverse('users:profile', kwargs={'username': user.username}))
 
         # status code'ni tekshiramiz
         self.assertEqual(response.status_code, 200)
@@ -221,4 +221,4 @@ class ProfileTestCase(TestCase):
         self.assertEqual(user.first_name, 'NewFirstName'),
         self.assertEqual(user.last_name, 'NewLastName')
         self.assertEqual(user.email, 'newemail@gmail.com')
-        self.assertEqual(response.url, reverse('users:profile'))
+        self.assertEqual(response.url, reverse('users:profile', kwargs={'username': user.username}))

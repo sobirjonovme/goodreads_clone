@@ -9,7 +9,16 @@ def landing_page(request):
 
 
 def home_page_view(request):
-    review_list = BookReview.objects.all().order_by('-create_at')
+    # reviews filter
+    filter_by = request.GET.get('filter', 'all')
+
+    if filter_by == 'by_friends':
+        # review only written by request users friends
+        review_list = BookReview.objects.filter(user__friends=request.user).order_by('-create_at')
+        button_activity = ['secondary', 'info']
+    else:
+        review_list = BookReview.objects.all().order_by('-create_at')
+        button_activity = ['info', 'secondary']
 
     # to get page number from http request
     page = request.GET.get('page', 1)
@@ -25,5 +34,5 @@ def home_page_view(request):
     return render(
         request,
         'home.html',
-        {'page_reviews': page_reviews, 'page_range': page_range}
+        {'page_reviews': page_reviews, 'page_range': page_range, 'button_activity': button_activity}
     )

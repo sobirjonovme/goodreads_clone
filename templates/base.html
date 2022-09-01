@@ -3,7 +3,7 @@
 <!-- getting urls as veriables to user later -->
 {% url 'home_page' as home_page_url %}
 {% url 'books:list' as books_page_url %}
-{% url 'users:profile' as user_profile_page_url %}
+{% url 'users:profile' request.user.username as user_profile_page_url %}
 {% url 'users:profile-edit' as user_profile_edit_page_url %}
 <!-- /getting urls as veriables to user later -->
 
@@ -33,6 +33,8 @@
 </head>
 
 <body class="mx-5">
+
+    <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-light mb-4" style="background-color: #F5E4C0;">
       <div class="container-fluid">
         <a class="navbar-brand fw-bold" href="{% url 'landing_page' %}" style="color: #825C0B" >Goodreads Clone</a>
@@ -40,7 +42,9 @@
           <span class="navbar-toggler-icon"></span>
         </button>
 
+        <!-- Navbar all menu -->
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <!-- Navbar Menu buttons -->
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item">
               <a class="nav-link fw-semibold {% if request.path == home_page_url %} active {% endif %}" aria-current="page" href="{{ home_page_url }}">Home</a>
@@ -49,28 +53,39 @@
               <a class="nav-link fw-semibold {% if request.path == books_page_url %} active {% endif %}" aria-current="page" href="{{ books_page_url }}">Books</a>
             </li>
           </ul>
+          <!-- /Navbar Menu buttons -->
 
           {% if request.user.is_authenticated %}
+            <!-- Navbar dropdown menu -->
             <ul class="navbar-nav">
                 <li class="nav-item dropdown">
                   <a class="nav-link dropdown-toggle fw-semibold {% if request.path == user_profile_page_url or request.path == user_profile_edit_page_url %} active {% endif %}" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                      {{ request.user.username | title }}
+                      {{ request.user.username }}
                   </a>
                   <ul class="dropdown-menu">
-                    <li><a class="dropdown-item" href="{% url 'users:profile' %}">Profile</a></li>
+                    <li><a class="dropdown-item" href="{% url 'users:profile' request.user.username %}">Profile</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item" href="{% url 'friendship:request-list' %}">Friend Requests</a></li>
                     <li><hr class="dropdown-divider"></li>
                     <li><a class="dropdown-item" href="{% url 'users:logout' %}">LogOut</a></li>
                   </ul>
                 </li>
             </ul>
+            <!-- /Navbar dropdown menu -->
           {% else %}
+            <!-- Login button -->
             <a class="btn btn-secondary" href="{% url 'users:login' %}">Login</a>
+            <!-- /Login button -->
           {% endif %}
         </div>
+        <!-- /Navbar all menu -->
       </div>
     </nav>
+    <!-- /Navbar -->
+
 
     <div class="container mb-5">
+        <!-- Alert Messages -->
         {% if messages %}
             <div class="mt-2">
             {% for message in messages %}
@@ -80,9 +95,12 @@
             {% endfor %}
             </div>
         {% endif %}
+        <!-- /Alert Messages -->
 
+        <!-- Main content block -->
         {% block content %}
         {% endblock %}
+        <!-- /Main content block -->
     </div>
 
 

@@ -3,9 +3,12 @@ from django.contrib.auth import login, logout
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, redirect
+from django.urls import reverse
 from django.views import View
 
 from .forms import UserCreateForm, UserUpdateForm
+from .models import CustomUser
+from friendship.models import FriendRequest
 
 
 # Create your views here.
@@ -53,11 +56,22 @@ class LoginView(View):
 
 
 class ProfileView(LoginRequiredMixin, View):
-    def get(self, request):
-        # LoginRequiredMixin'ning o'zi pastdagi izohga olingan kodni bajarib beradi
-        # if not request.user.is_authenticated:
-        #     return redirect('users:login')
-        return render(request, 'users/profile.html', {'user': request.user})
+    def get(self, request, username):
+        user = CustomUser.objects.get(username=username)
+        is_friend = user.friends.filter(username=request.user.username)
+        is_friend_request_from_you = FriendRequest.objects.filter(from_user=request.user, to_user=user)
+        is_friend_request_to_you = FriendRequest.objects.filter(from_user=user, to_user=request.user)
+
+        return render(
+            request,
+            'users/profile.html',
+            {
+                'user': user,
+                'is_friend': is_friend,
+                'is_friend_request_from_you': is_friend_request_from_you,
+                'is_friend_request_to_you': is_friend_request_to_you
+            }
+        )
 
 
 class LogOutView(LoginRequiredMixin, View):
@@ -90,6 +104,6 @@ class ProfileUpdateView(LoginRequiredMixin, View):
         if user_update_form.is_valid():
             user_update_form.save()
             messages.success(request, "You have successfully updated your profile.")
-            return redirect('users:profile')
+            return redirect(reverse('users:profile', kwargs={'username': request.user.username}))
         else:
             return render(request, 'users/profile_edit.html', {'update_form': user_update_form})

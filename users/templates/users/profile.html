@@ -19,11 +19,44 @@
                     <img class="profile-pic" alt="Profile Picture" src="{{ user.profile_picture.url }}">
                 </button>
 
-                <span class="name mt-3">{{ user.first_name }} {{ user.last_name }}</span>
-                <span class="idd">@{{ user.username }}</span>
-                <span class="idd mt-2">{{ user.email }}</span>
+                <span class="name fw-bold mt-3">{{ user.first_name }} {{ user.last_name }}</span>
+                <span class="idd fw-normal">@{{ user.username }}</span>
+                <span class="idd fw-light mt-2">{{ user.email }}</span>
+                <a href="{% url 'friendship:friend-list' user.id %}" class="btn btn-light btn-lg fw-semibold">
+                    <i class="bi bi-person-rolodex"></i>
+                    Friend{{ user.friends.count | pluralize }}: {{ user.friends.count }}
+                </a>
 
-                <a href="{% url 'users:profile-edit' %}" class="btn btn-dark mt-4">Edit Profile</a>
+                {% if request.user == user %}
+                    <a href="{% url 'users:profile-edit' %}" class="btn btn-dark mt-4">Edit Profile</a>
+                {% else %}
+                    {% if is_friend %}
+                        <!-- is friends -->
+                        <span>
+                        <a class="btn btn-success mt-4"> <i class="bi bi-person-check-fill"></i> You are friends </a>
+                        <a href="{% url 'friendship:remove-friend' user.id %}" class="btn btn-danger mt-4"> <i class="bi bi-person-x-fill"></i> Remove Friend </a>
+                        </span>
+                        <!-- /is friends -->
+                    {% elif is_friend_request_to_you %}
+                        <!-- is requested to you -->
+                        <span>
+                        <a href="{% url 'friendship:response-request' is_friend_request_to_you.0.id %}?answer=accept&where=profile" class="btn btn-primary mt-4"> <i class="bi bi-person-check-fill"></i> Accept </a>
+                        <a href="{% url 'friendship:response-request' is_friend_request_to_you.0.id %}?answer=reject&where=profile" class="btn btn-danger mt-4"> <i class="bi bi-person-x-fill"></i> Reject </a>
+                        </span>
+                        <!-- /is requested to you -->
+                    {% elif is_friend_request_from_you %}
+                        <!-- is requested from you -->
+                        <span>
+                        <a class="btn btn-secondary mt-4"> <i class="bi bi-person-check-fill"></i> Requested </a>
+                        <a href="{% url 'friendship:cancel-request' user.id %}" class="btn btn-danger mt-4"> <i class="bi bi-person-x-fill"></i> Cancel Request </a>
+                        </span>
+                        <!-- /is requested from you -->
+                    {% else %}
+                         <span>
+                            <a href="{% url 'friendship:send-request' user.id %}" class="btn btn-primary mt-4"> <i class="bi bi-person-plus-fill"></i> Friend Request </a>
+                        </span>
+                    {% endif %}
+                {% endif %}
                 <div class=" px-2 rounded mt-4 date ">
                     <span class="join">Joined {{ user.date_joined | date:"M d, Y" }}</span>
                 </div>

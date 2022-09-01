@@ -15,6 +15,7 @@
 {% block content %}
     <h1 class="mb-5">Book Detail</h1>
 
+    <!-- Book detail -->
     <div class="row">
         <div class="col-3">
             <img class="cover-pic" alt="cover picture" src="{{ book.cover_picture.url }}">
@@ -42,18 +43,21 @@
             <p> {{ book.description }} </p>
         </div>
     </div>
+    <!-- /Book detail -->
 
-
+    <!-- Reviews section -->
     <section class="row mt-3" >
         <div class="col-8">
           <div class="container py-4">
 
               <div class="mb-3 fw-semibold fs-1">Reviews</div>
 
+              <!-- Reviews container -->
               <div class="row d-flex justify-content-center">
                 <div class="col-12 col-10">
                   <div class="card text-dark">
 
+                    <!-- Writing new review -->
                     <div class="card-body p-4">
                         <div class="flex-start">
                             <h5 class="fw-semibold mb-3"> Write Review </h5>
@@ -65,15 +69,21 @@
                         </div>
                     </div>
                     <hr class="my-0" />
+                    <!-- /Writing new review -->
 
+                    <!-- Reviews list -->
                     {% for review in reviews_list %}
                         <div class="card-body p-4">
                           <div class="d-flex flex-start">
-                            <img class="rounded-circle shadow-1-strong me-3"
-                              src="{{ review.user.profile_picture.url }}" alt="avatar" width="60" height="60" />
+                            <a href="{% url 'users:profile' review.user.username %}">
+                                <img class="rounded-circle shadow-1-strong me-3"
+                                  src="{{ review.user.profile_picture.url }}" alt="avatar" width="60" height="60" />
+                            </a>
                             <div>
                               <h6 class="fw-bold mb-1">{{ review.user.first_name }} {{ review.user.last_name }}</h6>
-                              <h6 class="fw-normal mb-1">@{{ review.user.username }} </h6>
+                              <a href="{% url 'users:profile' review.user.username %}">
+                                <h6 class="fw-normal mb-1">@{{ review.user.username }} </h6>
+                              </a>
                               <div class="d-flex align-items-center mb-3">
                                 <p class="fw-light mb-0">
                                   {{ review.create_at | date:"d F, Y | H:i" }}
@@ -91,22 +101,19 @@
                             </div>
                           </div>
                         </div>
-
                         <hr class="my-0" />
-
                     {% empty %}
                         <p class="fs-2 fw-normal text-center text-muted">No comments yet</p>
                     {% endfor %}
-
-
-
+                    <!-- /Reviews list -->
 
                   </div>
                 </div>
               </div>
+              <!-- /Reviews container -->
             </div>
         </div>
     </section>
-
+    <!-- /Revies section -->
 
 {% endblock %}

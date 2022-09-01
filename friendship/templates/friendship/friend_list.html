@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Friend List
+{% endblock %}
+
+{% block content %}
+
+<section class="row mt-3" >
+    <div class="col-8">
+        <div class="container py-4">
+
+            <div class="mb-3 fw-semibold fs-1">Friends List</div>
+
+            <!-- Friends container -->
+            <div class="row d-flex justify-content-center">
+            <div class="col-12 col-10">
+              <div class="card text-dark">
+
+                <!-- Friends list -->
+                {% for friend in friend_list %}
+                    <div class="card-body p-4">
+                      <div class="d-flex flex-start">
+
+                        <a href="{% url 'users:profile' friend.username %}">
+                            <img class="rounded-circle shadow-1-strong me-3"
+                                src="{{ friend.profile_picture.url }}" alt="avatar" width="60" height="60" />
+                        </a>
+
+                        <div>
+                          <h6 class="fw-bold mb-1">{{ friend.first_name }} {{ friend.last_name }}</h6>
+                          <a href="{% url 'users:profile' friend.username %}">
+                              <h6 class="fw-normal mb-1">@{{ friend.username }} </h6>
+                          </a>
+                          <div class="d-flex align-items-center mb-3">
+                            <p class="fw-light mb-0">
+                              Joined {{ friend.date_joined | date:"M d, Y" }}
+                            </p>
+                          </div>
+                        </div>
+
+                      </div>
+                    </div>
+                    <hr class="my-0" />
+                {% empty %}
+                    <p class="fs-2 fw-normal text-center text-muted">No friends yet</p>
+                {% endfor %}
+                <!-- /Friends list -->
+
+              </div>
+            </div>
+            </div>
+            <!-- /Friends container -->
+        </div>
+    </div>
+</section>
+
+{% endblock %}

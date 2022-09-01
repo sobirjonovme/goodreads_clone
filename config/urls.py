@@ -28,6 +28,7 @@ urlpatterns = [
 
     path('users/', include('users.urls')),
     path('books/', include('books.urls')),
+    path('friendship/', include('friendship.urls')),
     path('api/', include('api.urls')),
 ]
 # Media fayllar bn ishlash uchun urls shunday qo'shiladi

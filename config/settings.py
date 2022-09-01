@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     # local apps
     'books.apps.BooksConfig',
     'users.apps.UsersConfig',
+    'friendship.apps.FriendshipConfig',
     'api.apps.ApiConfig',
 ]
 

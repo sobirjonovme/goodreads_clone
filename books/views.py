@@ -55,7 +55,7 @@ class BookDetailView(View):
             {'book': book, 'reviews_list': reviews, 'review_form': review_form}
         )
 
-    # Alohida class ochamiz LoginrequiredMixin'ni ishlatish uchun
+    # Alohida class ochamiz LoginRequiredMixin'ni ishlatish uchun
     # def post(self, request, book_id):
     #     book = Book.objects.get(id=book_id)
     #     review_form = BookReviewForm(data=request.POST)

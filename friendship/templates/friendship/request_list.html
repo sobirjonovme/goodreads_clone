@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Friend Requests
+{% endblock %}
+
+{% block content %}
+
+    <section class="row mt-3" >
+        <div class="col-8">
+            <div class="container py-4">
+
+                <div class="mb-3 fw-semibold fs-1">Friend Request List</div>
+
+                <!-- Friends container -->
+                <div class="row d-flex justify-content-center">
+                <div class="col-12 col-10">
+                  <div class="card text-dark">
+
+                    <!-- Friends list -->
+                    {% for request in request_list %}
+                        <div class="card-body p-4">
+                          <div class="d-flex flex-start">
+
+                            <a href="{% url 'users:profile' request.from_user.username %}">
+                                <img class="rounded-circle shadow-1-strong me-3"
+                                    src="{{ request.from_user.profile_picture.url }}" alt="avatar" width="60" height="60" />
+                            </a>
+
+                            <div>
+                              <h6 class="fw-bold mb-1">{{ request.from_user.first_name }} {{ request.from_user.last_name }}</h6>
+                              <a href="{% url 'users:profile' request.from_user.username %}">
+                                  <h6 class="fw-normal mb-1">@{{ request.from_user.username }} </h6>
+                              </a>
+                              <div class="d-flex align-items-center mb-3">
+                                <p class="fw-light mb-0">
+                                  Joined {{ request.from_user.date_joined | date:"M d, Y" }}
+                                </p>
+                              </div>
+
+                              <a href="{% url 'friendship:response-request' request.id %}?answer=accept&where=request-list" class="btn btn-primary"> <i class="bi bi-person-check-fill"></i> Accept </a>
+                              <a href="{% url 'friendship:response-request' request.id %}?answer=reject&where=request-list" class="btn btn-danger ms-3"> <i class="bi bi-person-x-fill"></i> Reject </a>
+
+                            </div>
+
+                          </div>
+                        </div>
+                        <hr class="my-0" />
+                    {% empty %}
+                        <p class="fs-2 fw-normal text-center text-muted">No friend requests found</p>
+                    {% endfor %}
+                    <!-- /Friends list -->
+
+                  </div>
+                </div>
+                </div>
+                <!-- /Friends container -->
+            </div>
+        </div>
+    </section>
+
+{% endblock %}
