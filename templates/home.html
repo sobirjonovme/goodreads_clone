@@ -68,7 +68,7 @@
           <ul class="pagination">
               {% if page_reviews.has_previous %}
                  <li class="page-item">
-                  <a class="page-link" href="{% url 'home_page' %}?page={{ page_reviews.previous_page_number }}"> Previous </a>
+                  <a class="page-link" href="{% url 'home_page' %}?page={{ page_reviews.previous_page_number }}{% if request.GET.filter %}&filter={{ request.GET.filter }}{% endif %}"> Previous </a>
                 </li>
               {% else %}
                 <li class="page-item disabled">
@@ -79,7 +79,7 @@
               {% for i in page_range %}
                 {% if page_reviews.number == i %}
                     <li class="page-item active" aria-current="page">
-                      <a class="page-link" href="{% url 'home_page' %}?page={{ i }}">{{ i }}</a>
+                      <a class="page-link" href="{% url 'home_page' %}?page={{ i }}{% if request.GET.filter %}&filter={{ request.GET.filter }}{% endif %}">{{ i }}</a>
                     </li>
                 {% elif i == page_reviews.paginator.ELLIPSIS %}
                     <li class="page-item">
@@ -87,14 +87,14 @@
                     </li>
                 {% else %}
                     <li class="page-item">
-                        <a class="page-link" href="{% url 'home_page' %}?page={{ i }}"> {{ i }} </a>
+                        <a class="page-link" href="{% url 'home_page' %}?page={{ i }}{% if request.GET.filter %}&filter={{ request.GET.filter }}{% endif %}"> {{ i }} </a>
                     </li>
                 {% endif %}
               {% endfor %}
 
               {% if page_reviews.has_next %}
                  <li class="page-item">
-                  <a class="page-link" href="{% url 'home_page' %}?page={{ page_reviews.next_page_number }}"> Next </a>
+                  <a class="page-link" href="{% url 'home_page' %}?page={{ page_reviews.next_page_number }}{% if request.GET.filter %}&filter={{ request.GET.filter }}{% endif %}"> Next </a>
                 </li>
               {% else %}
                 <li class="page-item disabled">
@@ -107,7 +107,6 @@
 
     {% else %}
         <h2> No Reviews found </h2>
-
     {% endif %}
 
 {% endblock %}
