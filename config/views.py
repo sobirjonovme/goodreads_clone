@@ -32,7 +32,7 @@ def home_page_view(request):
     # to get page number from http request
     page = request.GET.get('page', 1)
     # to get page size from http request
-    page_size = request.GET.get('page_size', 1)
+    page_size = request.GET.get('page_size', 10)
 
     paginator = Paginator(review_list, page_size)
 
