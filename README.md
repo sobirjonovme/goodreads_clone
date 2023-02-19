@@ -1,6 +1,6 @@
 # goodreads_clone
 A clone of the popular book-reviewing website, Goodreads.com.<br>
-Link for the clone: [goodreads_clone](https://Huntsman2003.pythonanywhere.com)
+Link for Live Demo: [goodreads_clone](https://Huntsman2003.pythonanywhere.com)
 
 ## Introduction
 The `goodreads_clone` repository is a platform for book lovers to come together and share their thoughts and opinions on a wide range of books, just like on Goodreads.com. Only designated administrators are able to add books to the site, while registered users can leave reviews for these books and rank them. The site also allows users to send friendship requests to one another and become friends. 
